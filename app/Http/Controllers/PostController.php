@@ -52,11 +52,11 @@ class PostController extends Controller
         try {
             if (request('category') || request('search')) {
                 $posts = Post::with(['category', 'user'])->filter(request(['search', 'category']))->get();
-                $categories = Category::all(['id', 'name']);
+                $categories = Category::all(['id', 'name', 'slug']);
                 return view('front.allpost', compact('posts', 'categories'));
             }
             $post = Post::with('category', 'user', 'comment')->where('slug', $post)->first();
-            $categories = Category::all(['id', 'name']);
+            $categories = Category::all(['id', 'name', 'slug']);
             $likes = $post->like()->where('is_like', 1)->count();
             $dislikes = $post->like()->where('is_like', 0)->count();
             return view('front.post', compact('post', 'categories', 'likes', 'dislikes'));
@@ -153,28 +153,28 @@ class PostController extends Controller
             Post::onlyTrashed()->whereIn('id', $ids)->restore();
             return response()->json(['message' => 'Posts are restored successfully']);
         } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()]);
+            return response()->json(['message' => 'Failed to restore posts'], 500);
         }
     }
 
     public function postView()
     {
         $post = Post::with(['category', 'user'])->first();
-        $categories = Category::all(['id', 'name']);
+        $categories = Category::all(['id', 'name', 'slug']);
         return view('front.post', compact('post', 'categories'));
     }
 
     public function allPost()
     {
         $posts = Post::with(['category', 'user', 'comment'])->filter(request(['search', 'category']))->get();
-        $categories = Category::all(['id', 'name']);
+        $categories = Category::all(['id', 'name', 'slug']);
         return view('front.allpost', compact('posts', 'categories'));
     }
 
-    public function categoriesPost(string $category)
+    public function categoriesPost(Category $category)
     {
         $posts = Post::with('category')->whereRelation('category', 'name', $category)->filter(request(['search', 'category']))->get();
-        $categories = Category::all(['id', 'name']);
+        $categories = Category::all(['id', 'name', 'slug']);
         return view('front.allpost', compact('posts', 'categories'));
     }
 }

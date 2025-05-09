@@ -1,23 +1,15 @@
 <?php
 
-use App\Models\Post;
-use App\Models\User;
-use App\Models\Category;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
-use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LikeController;
-use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\PermissionController;
-use App\Http\Middleware\UserAdminMiddleware;
 
 // ->middleware('auth');
 
@@ -76,9 +68,6 @@ Route::middleware('auth')->group(function () {
     Route::post('post/liked', [LikeController::class, 'liked'])->name('liked');
 });
 
-// Route::group(['middleware' => ['auth', 'web']], function () {
-// Route::get('/first', [PostController::class, 'postview']);
 Route::get('/', [PostController::class, 'allPost']);
 Route::get('posts/{post:slug}', [PostController::class, 'show']);
-Route::get('categories/posts/{category}', [PostController::class, 'categoriesPost']);
-// });
+Route::get('category/{category:slug}', [PostController::class, 'categoriesPost'])->name('category-posts');

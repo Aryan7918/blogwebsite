@@ -6,9 +6,10 @@
                 <div class="col-sm-12">
                     <select name="category" id="name" class="select2 form-control">
                         <option></option>
-                        @foreach ($categories as $category )
-                        <option value="{{$category->id}}" {{ request()->
-                            query('category')==$category->id?'selected':''}}>{{ $category->name}}</option>
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}"
+                                {{ request()->query('category') == $category->id ? 'selected' : '' }}>
+                                {{ $category->name }}</option>
                         @endforeach
                     </select>
                 </div>
